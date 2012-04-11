@@ -7,6 +7,7 @@ public class Pawn {
 	private Integer safetySpace;
 	private boolean atStart = false;
 	private boolean atHome = false;
+	private Integer boardCell; 
 	
 	/*************************************** Constructors *****************************************/
 	
@@ -72,6 +73,17 @@ public class Pawn {
 	}
 	
 	/**
+	 * Sets all fields that identify the location of the pawn to null or false.
+	 */
+	public void remove()
+	{
+		location = null;
+		safetySpace = null;
+		atStart = false;
+		atHome = false;
+	}
+	
+	/**
 	 * @return The color of the pawn.
 	 */
 	public Color getColor()
@@ -91,6 +103,24 @@ public class Pawn {
 				", At Home: " + atHome + ", At Start: " + atStart;
 		
 		return string;
+	}
+	
+	/**
+	 * Returns the the cell number of the space the pawn is located.
+	 * @return boardCell
+	 */
+	public Integer getCell()
+	{
+		return boardCell;
+	}
+	
+	/**
+	 * Sets the location of the Pawn in the safetySpace array.
+	 * @param space The index of the Pawn in the SafetySpace array.
+	 */
+	public void setSafety(int space)
+	{
+		safetySpace = space;
 	}
 	
 	// main method for testing

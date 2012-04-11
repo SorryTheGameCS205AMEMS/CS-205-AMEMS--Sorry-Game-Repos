@@ -1,9 +1,10 @@
 
 public class BoardSpace {
 	/****************************************** Fields ********************************************/
-	protected boolean occupied = false; // Is there a pawn there?
+	private boolean occupied = false; // Is there a pawn there?
 	private Pawn pawn; // holds color and which pawn
-	private Color color;
+	//private Color color;
+	private int location;
 
 	/*************************************** Constructors *****************************************/
 	
@@ -19,11 +20,12 @@ public class BoardSpace {
 	 * in its own constructor. The color field should be removed from this class.
 	 * -Sean
 	 */
+	/*
 	public BoardSpace(Color clr)
 	{
 		color = clr;
 	}
-
+	*/
 	/****************************************** Methods *******************************************/
 	
 	/**
@@ -41,16 +43,37 @@ public class BoardSpace {
 	 */
 	public void placePawn(Pawn p)
 	{
-		setPawn(p);
-		setOccupied(true);
+		if (isOccupied())
+		{
+			// Place the pawn occupying this space back at start.
+			Pawn removedPawn;
+			removedPawn = removePawn();
+			removedPawn.goToStart();
+			
+			// Update the space with the new Pawn.
+			p.setBoardLocation(location);
+			setPawn(p);
+			setOccupied(true);
+		}
+		else
+		{
+			// Update the space with the new Pawn.
+			p.setBoardLocation(location);
+			setPawn(p);
+			setOccupied(true);
+		}
 	}
 	
+	/**
+	 * Removes the Pawn from the board.
+	 * @return The removed Pawn.
+	 */
 	public Pawn removePawn()
 	{
 		if (this.isOccupied())
 		{
 			occupied = false;
-			pawn.setBoardLocation(null);
+			pawn.remove();
 			return pawn;
 		}
 		else
@@ -62,7 +85,7 @@ public class BoardSpace {
 	 * be able to call this, so I set it to private. -Sean
 	 * @param occ true if there is a pawn on this space, false otherwise.
 	 */
-	private void setOccupied(boolean occ)
+	public void setOccupied(boolean occ)
 	{
 		occupied = occ;
 	}
@@ -72,7 +95,7 @@ public class BoardSpace {
 	 * be able to call this, so I set it to private. -Sean
 	 * @param p the Pawn the place.
 	 */
-	private void setPawn(Pawn p)
+	public void setPawn(Pawn p)
 	{
 		pawn = p;
 	}
@@ -85,9 +108,9 @@ public class BoardSpace {
 		String str = "Occupied: ";
 		
 		if (isOccupied())
-			str = str + isOccupied() + " Pawn: " + pawn.toString();
+			str = str + isOccupied() + " Pawn: " + pawn.toString() + " Location: " + getLocation();
 		else
-			str = str + isOccupied();
+			str = str + isOccupied()  + " Location: " + getLocation();
 		
 		return str;
 	}
@@ -97,9 +120,29 @@ public class BoardSpace {
 	 * 
 	 * @return The color of the slide space.
 	 */
+	/*
 	public Color getColor()
 	{
 		return color;
+	}
+	*/
+	
+	/**
+	 * Returns the index of the space in the board.
+	 * @return location
+	 */
+	public int getLocation()
+	{
+		return location;
+	}
+	
+	/**
+	 * Sets the location of the space in the board. Should be set when the board is built.
+	 * @param l The index of the space in the ArrayList.
+	 */
+	public void setLocation(int l)
+	{
+		location = l;
 	}
 	
 	// main method for testing

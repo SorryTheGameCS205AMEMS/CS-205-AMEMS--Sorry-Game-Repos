@@ -1,11 +1,15 @@
+import java.util.ArrayList;
 
-public class SlideSpace extends BoardSpace {
+public class SlideSpace extends BoardSpace 
+{
 	
 	/****************************************** Fields ********************************************/
 	private boolean arrow = false; // True if it is the arrow slide space
 	private Color color;
-	private boolean landing=false; ////true if is end spot of a slide
-	private boolean entry=false; ////t
+	private boolean landing = false; ////true if is end spot of a slide
+	private boolean entry = false; ////t
+	private ArrayList<SlideSpace> slideSpaces;
+	
 	/*************************************** Constructors *****************************************/
 	
 	/**
@@ -41,44 +45,90 @@ public class SlideSpace extends BoardSpace {
 	// Somewhere there needs to be a method that checks if the space is an arrow space,
 	// and if so, moves the pawns accordingly.
 	
-	public void placePawn(Pawn p)
+	/**
+	 * Places the pawn at its appropriate location and bumps any Pawns back home that need
+	 * to be as a result of placing the Pawn.
+	 * @param p The Pawn to place.
+	 */
+	public void placePawn(Pawn p) // not working yet
 	{
-		if (arrow)
+		Pawn removedPawn; // To hold a Pawn after it is removed from a space.
+		
+		// This also need to check if the exact space it's landing is occupied.
+		if (arrow && (p.getColor() != this.getColor()))
 		{
-			//do something
+			for (int i = 0; i < slideSpaces.size(); i++)
+			{
+				if (slideSpaces.get(i).isOccupied())
+				{
+					System.out.println(i + " is occupied");
+					removedPawn = slideSpaces.get(i).removePawn();
+					removedPawn.goToStart();
+				}
+			}
+			slideSpaces.get(slideSpaces.size() - 1).setOccupied(true);
+			slideSpaces.get(slideSpaces.size() - 1).setPawn(p); // Create pointer to Pawn
+			p.setBoardLocation(slideSpaces.get(slideSpaces.size() - 1).getLocation()); // Set the Pawns board location
+			
 		}
 		else
 		{
 			setOccupied(true);
+			p.setBoardLocation(getLocation());
 			setPawn(p);
 		}
 	}
-//////////////////////////////////////////////////////////////////////
-//Arrow,landing,and entry Check and setters for slide by Nestor 
-  public boolean isArrow(){
-  return arrow;
-  }
+	
+	//////////////////////////////////////////////////////////////////////
+	//Arrow,landing,and entry Check and setters for slide by Nestor 
+	public boolean isArrow()
+	{
+		return arrow;
+	}
+	  
+	public void setArrow()
+	{
+		arrow = true;
+	}
   
-  public void setArrow(){
-  arrow=true;
-  }
-  
-  public boolean isLanding(){
-  return landing;
-  }
-  
-  public void setLanding(){
-  landing=true;
-  }
-  
-  public boolean isEnrty(){
-  return entry;
-  }
-  
-  public void setEntry(){
-  entry=true;
-  }
-
-
+	public boolean isLanding()
+	{
+		return landing;
+	}
+	  
+	public void setLanding()
+	{
+		landing=true;
+	}
+	  
+	public boolean isEntry()
+	{
+		return entry;
+	}
+	  
+	public void setEntry()
+	{
+		entry=true;
+	}
+///////////////////////////////////////////////////////////
+	
+	/**
+	 * If the SlideSpace is an arrow, it needs to know all the places it slides past.
+	 * @param slides An array of the SlideSpaces connected to the arrow.
+	 */
+	public void connectSlideSpaces(ArrayList<SlideSpace> slides)
+	{
+		slideSpaces = slides;
+	}
+	
+	/**
+	 * I made this just for testing, but it might be useful.
+	 * @return If and arrow space it returns the list of slideSpaces it is connected to, 
+	 * null otherwise.
+	 */
+	public ArrayList<SlideSpace> getSlideSpaces()
+	{
+		return slideSpaces;
+	}
   
 }

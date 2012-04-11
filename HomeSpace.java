@@ -32,4 +32,13 @@ public class HomeSpace extends BoardSpace
 			// We have a winner
 		}
 	}
+	
+	/**
+	 * Pawns can't be removed from the homespace.
+	 * @return always null
+	 */
+	public Pawn removePawn()
+	{
+		return null;
+	}
 }
